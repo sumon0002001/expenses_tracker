@@ -8,7 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
   DialogFooter,
-  DialogClose
+  DialogClose,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,7 +18,7 @@ import { Budgets } from "@/utils/schema";
 import { useUser } from "@clerk/nextjs";
 import { toast } from "sonner";
 
-const CreateBudget = () => {
+const CreateBudget = ({ refreshData }) => {
   const [emojiIcon, setEmojiIcon] = useState("😀");
   const [openEmojiPicker, setOpenEmojiPicker] = useState(false);
   const [name, setName] = useState("");
@@ -39,6 +39,7 @@ const CreateBudget = () => {
       })
       .returning({ insertedId: Budgets.id });
     if (result) {
+      refreshData();
       toast("New Budget is created");
     }
   };
@@ -91,14 +92,14 @@ const CreateBudget = () => {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-          <DialogClose asChild>
-            <Button
-              className="mt-5 w-full"
-              disabled={!(name && amount)}
-              onClick={() => onCreateBudget()}
-            >
-              Create Budget
-            </Button>
+            <DialogClose asChild>
+              <Button
+                className="mt-5 w-full"
+                disabled={!(name && amount)}
+                onClick={() => onCreateBudget()}
+              >
+                Create Budget
+              </Button>
             </DialogClose>
           </DialogFooter>
         </DialogContent>
