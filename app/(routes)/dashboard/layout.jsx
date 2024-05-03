@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { db } from "@/utils/dbConfig";
 import { Budgets } from "@/utils/schema";
 import { eq } from "drizzle-orm";
+import { Toaster } from "@/components/ui/sonner";
 
 const DashboardLayout = ({ children }) => {
   const { user } = useUser();
@@ -33,6 +34,7 @@ const DashboardLayout = ({ children }) => {
       </div>
       <div className="md:ml-64 ">
         <DashboardHeader />
+        <Toaster />
         {children}
       </div>
     </div>

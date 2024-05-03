@@ -7,16 +7,41 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogFooter,
+  DialogClose
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import EmojiPicker from "emoji-picker-react";
+import { db } from "@/utils/dbConfig";
+import { Budgets } from "@/utils/schema";
+import { useUser } from "@clerk/nextjs";
+import { toast } from "sonner";
 
 const CreateBudget = () => {
   const [emojiIcon, setEmojiIcon] = useState("😀");
   const [openEmojiPicker, setOpenEmojiPicker] = useState(false);
   const [name, setName] = useState("");
   const [amount, setAmount] = useState("");
+
+  const { user } = useUser();
+
+  const onCreateBudget = async () => {
+    // Create a new budget
+    // You can make an API call to create a new budget here
+    const result = await db
+      .insert(Budgets)
+      .values({
+        name: name,
+        amount: amount,
+        createdBy: user?.primaryEmailAddress?.emailAddress,
+        icon: emojiIcon,
+      })
+      .returning({ insertedId: Budgets.id });
+    if (result) {
+      toast("New Budget is created");
+    }
+  };
   return (
     <div>
       <Dialog>
@@ -62,16 +87,20 @@ const CreateBudget = () => {
                     onChange={(e) => setAmount(e.target.value)}
                   />
                 </div>
-                <Button
-                  className="mt-5 w-full"
-                  disabled={!(name && amount)}
-                  onClick={() => onCreateBudget()}
-                >
-                  Create Budget
-                </Button>
               </div>
             </DialogDescription>
           </DialogHeader>
+          <DialogFooter>
+          <DialogClose asChild>
+            <Button
+              className="mt-5 w-full"
+              disabled={!(name && amount)}
+              onClick={() => onCreateBudget()}
+            >
+              Create Budget
+            </Button>
+            </DialogClose>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>
