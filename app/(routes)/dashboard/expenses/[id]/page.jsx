@@ -8,7 +8,7 @@ import BudgetItem from "../../budgets/_components/BudgetItem";
 import AddExpenses from "../_components/AddExpenses";
 import ExpenseListTable from "../_components/ExpenseListTable";
 import { Button } from "@/components/ui/button";
-import { Pen, Trash } from "lucide-react";
+import { ArrowLeftIcon, Pen, Trash } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -83,6 +83,10 @@ const ExpensesScreen = ({ params }) => {
           className="flex gap-2 items-center
         "
         >
+          <ArrowLeftIcon
+            onClick={() => route.back()}
+            className="cursor-pointer"
+          />
           My Expenses
         </span>
         <div className="flex gap-2 items-center">
